@@ -1,0 +1,52 @@
+{
+  "name": "driver-pii",
+  "version": "1.0.0",
+  "description": "A Databox driver that simulates Reddit user data and saves them to a datastore",
+  "config": {
+    "registry": "localhost:5000"
+  },
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha",
+    "start": "node ./src/main.js",
+    "build": "docker build -t databox/driver-motruelayernzo .",
+    "deploy": "docker tag databox/driver-pii $npm_package_config_registry/driver-pii && docker push $npm_package_config_registry/driver-pii",
+    "build-arm": "docker build -f Dockerfile-arm -t databox/driver-pii-arm .",
+    "deploy-arm": "docker tag databox/driver-pii-arm $npm_package_config_registry/driver-pii-arm && docker push $npm_package_config_registry/driver-pii-arm",
+    "clean": "node ./node_modules/modclean/bin/modclean.js -p ./node_modules/ -r",
+    "getshell": "docker exec -i -t driver-pii /bin/bash",
+    "kill": "docker kill driver-pii",
+    "attach": "docker attach driver-pii",
+    "shell": "docker run -i -t databox/driver-pii /bin/bash",
+    "local": "docker run -i -t databox/driver-pii"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ADHATARAO/driver-pii.git"
+  },
+  "keywords": [
+    "Databox",
+    "reddit",
+    "stream"
+  ],
+  "author": "supriya",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ADHATARAO/driver-pii/issues"
+  },
+  "homepage": "https://github.com/ADHATARAO/driver-pii#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "modclean": "^2.1.2",
+    "node-databox": "^0.10.8",
+    "nonce-generator": "^1.0.2",
+    "oauth": "^0.9.15",
+    "pug": "^2.0.3",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "assert": "^1.5.0",
+    "mocha": "^5.2.0",
+    "supertest": "^3.4.2"
+  }
+}
