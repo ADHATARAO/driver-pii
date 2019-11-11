@@ -14,10 +14,10 @@
 		"json",
 		"timeseries"
 	],
-	"homepage": "https://github.com/minoskt/driver-reddit-simulator",
+	"homepage": "https://github.com/ADHATARAO/driver-pii.git",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/minoskt/driver-reddit-simulator.git"
+		"url": "git+https://github.com/ADHATARAO/driver-pii.git"
 	},
 	"external-whitelist": [
 		{
