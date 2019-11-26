@@ -17,7 +17,7 @@ try {
   RedditSimulatorDefaultSettings = require('./reddit-simulator-secret.json');
 } catch (e) {
   RedditSimulatorDefaultSettings = {
-    'client_id': '_piiINFO',
+    'pii': '_piiINFO',
   };
 }
 
@@ -38,7 +38,7 @@ app.get('/ui', function (req, res) {
       const { client_id } = settings;
       res.type('html');
       const html = ui_template
-        .replace('__CLIENT_ID__', client_id);
+        .replace('pii', client_id);
       res.send(html);
     });
 });
@@ -136,7 +136,7 @@ function setSettings(settings) {
 }
 
 async function save(datasourceid, data) {
-  console.log('Saving Reddit Simulator event::', data);
+  console.log('Saving pii event::', data);
   const json = { data };
   store.TSBlob.Write(datasourceid, json)
     .then((resp) => {
