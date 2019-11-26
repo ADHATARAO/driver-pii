@@ -1,7 +1,7 @@
 {
   "name": "driver-pii",
   "version": "1.0.0",
-  "description": "A Databox driver that simulates Reddit user data and saves them to a datastore",
+  "description": "A Databox driver that simulates user data and saves them to a datastore",
   "config": {
     "registry": "localhost:5000"
   },
@@ -25,7 +25,7 @@
   },
   "keywords": [
     "Databox",
-    "reddit",
+    "pii",
     "stream"
   ],
   "author": "supriya",
