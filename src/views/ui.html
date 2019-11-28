@@ -1,24 +1,30 @@
+<!doctype html>
 <html>
-    <head>
-    <script>
-      var openFile = function(event) {
-        var input = event.target;
+  <head>
+    <title>reading file</title>
+    <script type="text/javascript">
 
-        var reader = new FileReader();
-        reader.onload = function(){
-          var text = reader.result;
-          var node = document.getElementById('output');
-          node.innerText = text;
-          console.log(reader.result.substring(0, 200));
-        };
-        reader.readAsText(input.files[0]);
-      };
-    </script>
-    </head>
-    <body>
-    <input type='file' accept='text/plain' onchange='openFile(event)'><br>
-    <div id='output'>
-    ...
-    </div>
-    </body>
+	var reader = new FileReader();
+
+	function readText(that){
+
+		if(that.files && that.files[0]){
+			var reader = new FileReader();
+			reader.onload = function (e) {  
+				var output=e.target.result;
+
+				//process text to show only lines with "@":				
+				output=output.split("\n").filter(/./.test, /\@/).join("\n");
+
+				document.getElementById('main').innerHTML= output;
+			};//end onload()
+			reader.readAsText(that.files[0]);
+		}//end if html5 filelist support
+	} 
+</script>
+</head>
+<body>
+	<input type="file" onchange='readText(this)' />
+	<div id="main"></div>
+  </body>
 </html>
