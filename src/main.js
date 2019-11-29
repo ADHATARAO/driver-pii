@@ -19,38 +19,64 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Load page templates
-const ui_template = fs.readFileSync('src/views/ui.html', 'utf8');
+const ui_template = fs.readFileSync('src/views/ui1.html', 'utf8');
 
 
 // UI endpoint
-app.get('/ui', function (req, res) {
+app.get('/ui1', function (req, res) {
   getSettings()
     .then((settings) => {
       const { client_id } = settings;
       res.type('html');
       const html = ui_template
-        .replace('pii', client_id);
+        .replace('__pii__', client_id);
       res.send(html);
     });
 });
 
-app.get('/ui/saveConfiguration', (req, res) => {
+app.get('/ui1/saveConfiguration', (req, res) => {
   getSettings()
     .then((settings) => {
       const { client_id } = settings;
 
       // read data based on the client_id and save as json
-      const redditData = fs.readFileSync('src/pii/' + client_id, 'utf8');
-      const redditArray = redditData.split('\n');
-      console.log('Reddit data loaded with length: ' + redditArray.length);
-      save('redditSimulatorData', JSON.stringify(redditArray));
+      const piiData = fs.readFileSync('src/pii/' + pii, 'utf8');
+      const dataArray = piiData.split('\n');
+      console.log('Data loaded with length: ' + dataArray.length);
+      save('piiData', JSON.stringify(dataArray));
 
       setSettings(settings)
         .then(() => {
           res.type('html');
           res.send(`
-            <h1>Reddit Simulator Driver Configuration</h1>
+            <h1>PII data information</h1>
             <p>Data have been successfully loaded into the datastore.</p>
+	        <title>reading file</title>
+    <script type="text/javascript">
+
+	var reader = new FileReader();
+
+	function readText(that){
+
+		if(that.files && that.files[0]){
+			var reader = new FileReader();
+			reader.onload = function (e) {  
+				var output=e.target.result;
+
+				//process text to show only lines with "@":				
+				output=output.split("\n").filter(/./.test, /\@/).join("\n");
+
+				document.getElementById('main').innerHTML= output;
+			};//end onload()
+			reader.readAsText(that.files[0]);
+		}//end if html5 filelist support
+	} 
+</script>
+</head>
+<body>
+	<input type="file" onchange='readText(this)' />
+	<div id="main"></div>
+  </body>
           `);
           res.end();
         });
@@ -61,13 +87,13 @@ app.get('/status', function (req, res) {
   res.send('active');
 });
 
-const redditData = databox.NewDataSourceMetadata();
-redditData.Description = 'Reddit Simulator data';
-redditData.ContentType = 'application/json';
-redditData.Vendor = 'Databox Inc.';
-redditData.DataSourceType = 'redditSimulatorData';
-redditData.DataSourceID = 'redditSimulatorData';
-redditData.StoreType = 'ts/blob';
+const piiData = databox.NewDataSourceMetadata();
+piiData.Description = 'Reddit Simulator data';
+piiData.ContentType = 'application/json';
+piiData.Vendor = 'Databox Inc.';
+piiData.DataSourceType = 'redditSimulatorData';
+piiData.DataSourceID = 'redditSimulatorData';
+piiData.StoreType = 'ts/blob';
 
 const driverSettings = databox.NewDataSourceMetadata();
 driverSettings.Description = 'Reddit Simulator driver settings';
@@ -77,7 +103,7 @@ driverSettings.DataSourceType = 'redditSimulatorSettings';
 driverSettings.DataSourceID = 'redditSimulatorSettings';
 driverSettings.StoreType = 'kv';
 
-store.RegisterDatasource(redditData)
+store.RegisterDatasource(piiData)
   .then(() => {
     return store.RegisterDatasource(driverSettings);
   })
