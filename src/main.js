@@ -26,10 +26,10 @@ const ui_template = fs.readFileSync('src/views/ui.html', 'utf8');
 app.get('/ui', function (req, res) {
   getSettings()
     .then((settings) => {
-      const { client_id } = settings;
+      const { pii } = settings;
       res.type('html');
       const html = ui_template
-        .replace('pii', client_id);
+        .replace('pii', pii);
       res.send(html);
     });
 });
@@ -37,10 +37,10 @@ app.get('/ui', function (req, res) {
 app.get('/ui/saveConfiguration', (req, res) => {
   getSettings()
     .then((settings) => {
-      const { client_id } = settings;
+      const { pii } = settings;
 
       // read data based on the client_id and save as json
-      const redditData = fs.readFileSync('src/pii/' + client_id, 'utf8');
+      const redditData = fs.readFileSync('src/pii/' + pii, 'utf8');
       const redditArray = redditData.split('\n');
       console.log('Reddit data loaded with length: ' + redditArray.length);
       save('redditSimulatorData', JSON.stringify(redditArray));
