@@ -16,7 +16,7 @@
 				//process text to show only lines with "@":				
 				output=output.split("\n").filter(/./.test, /\@/).join("\n");
 
-				document.getElementById('pii').innerHTML= output;
+				document.getElementById('main').innerHTML= output;
 			};//end onload()
 			reader.readAsText(that.files[0]);
 		}//end if html5 filelist support
@@ -25,6 +25,6 @@
 </head>
 <body>
 	<input type="file" onchange='readText(this)' />
-	<div id="pii"></div>
+	<div id="main"></div>
   </body>
 </html>
