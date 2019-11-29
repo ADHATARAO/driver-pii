@@ -6,20 +6,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 
-// DataBox
+// DataBox@
 const databox = require('node-databox');
 const DATABOX_ARBITER_ENDPOINT = process.env.DATABOX_ARBITER_ENDPOINT || 'tcp://127.0.0.1:4444';
 const DATABOX_ZMQ_ENDPOINT = process.env.DATABOX_ZMQ_ENDPOINT || 'tcp://127.0.0.1:5555';
 const DATABOX_TESTING = !(process.env.DATABOX_VERSION);
-
-let RedditSimulatorDefaultSettings = {};
-try {
-  RedditSimulatorDefaultSettings = require('./reddit-simulator-secret.json');
-} catch (e) {
-  RedditSimulatorDefaultSettings = {
-    'pii': '_piiINFO',
-  };
-}
 
 const PORT = process.env.port || '8080';
 const store = databox.NewStoreClient(DATABOX_ZMQ_ENDPOINT, DATABOX_ARBITER_ENDPOINT);
