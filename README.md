@@ -1,5 +1,5 @@
 # driver-pii
-A [DataBox](https://www.databoxproject.uk) driver that loads existing reddit data from a file (`src/reddit-data/$user-id`) and stores it into a Databox datastore.
+A [DataBox](https://www.databoxproject.uk) driver that displays data from a file (`src/pii/_piiINFO`).
 
 
 # Data stored
