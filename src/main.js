@@ -62,19 +62,19 @@ app.get('/status', function (req, res) {
 });
 
 const piiData = databox.NewDataSourceMetadata();
-piiData.Description = 'Reddit Simulator data';
+piiData.Description = 'PII data';
 piiData.ContentType = 'application/json';
 piiData.Vendor = 'Databox Inc.';
-piiData.DataSourceType = 'redditSimulatorData';
-piiData.DataSourceID = 'redditSimulatorData';
+piiData.DataSourceType = 'PIIdata';
+piiData.DataSourceID = 'PIIdata';
 piiData.StoreType = 'ts/blob';
 
 const driverSettings = databox.NewDataSourceMetadata();
-driverSettings.Description = 'Reddit Simulator driver settings';
+driverSettings.Description = 'PII data settings';
 driverSettings.ContentType = 'application/json';
 driverSettings.Vendor = 'Databox Inc.';
-driverSettings.DataSourceType = 'redditSimulatorSettings';
-driverSettings.DataSourceID = 'redditSimulatorSettings';
+driverSettings.DataSourceType = 'PIIdatasettings';
+driverSettings.DataSourceID = 'PIIdatasettings';
 driverSettings.StoreType = 'kv';
 
 store.RegisterDatasource(piiData)
@@ -86,14 +86,14 @@ store.RegisterDatasource(piiData)
   });
 
 function getSettings() {
-  const datasourceid = 'redditSimulatorSettings';
+  const datasourceid = 'PIIdatasettings';
   return new Promise((resolve, reject) => {
     store.KV.Read(datasourceid, 'settings')
       .then((settings) => {
         console.log('[getSettings] read response = ', settings);
         if (Object.keys(settings).length === 0) {
           //return defaults
-          const settings = RedditSimulatorDefaultSettings;
+          const settings = Piidatasettings;
           //console.log('[getSettings] using defaults Using ----> ', settings);
           resolve(settings);
           return;
@@ -103,7 +103,7 @@ function getSettings() {
         resolve(settings);
       })
       .catch((err) => {
-        const settings = RedditSimulatorDefaultSettings;
+        const settings = Piidatasettings;
         console.log('Error getting settings', err);
         console.log('[getSettings] using defaults Using ----> ', settings);
         resolve(settings);
@@ -112,7 +112,7 @@ function getSettings() {
 }
 
 function setSettings(settings) {
-  const datasourceid = 'redditSimulatorSettings';
+  const datasourceid = 'PIIdatasettings';
   return new Promise((resolve, reject) => {
     store.KV.Write(datasourceid, 'settings', settings)
       .then(() => {
