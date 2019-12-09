@@ -61,6 +61,82 @@ app.get('/status', function (req, res) {
   res.send('active');
 });
 
+const piiData = databox.NewDataSourceMetadata();
+piiData.Description = 'Reddit Simulator data';
+piiData.ContentType = 'application/json';
+piiData.Vendor = 'Databox Inc.';
+piiData.DataSourceType = 'redditSimulatorData';
+piiData.DataSourceID = 'redditSimulatorData';
+piiData.StoreType = 'ts/blob';
+
+const driverSettings = databox.NewDataSourceMetadata();
+driverSettings.Description = 'Reddit Simulator driver settings';
+driverSettings.ContentType = 'application/json';
+driverSettings.Vendor = 'Databox Inc.';
+driverSettings.DataSourceType = 'redditSimulatorSettings';
+driverSettings.DataSourceID = 'redditSimulatorSettings';
+driverSettings.StoreType = 'kv';
+
+store.RegisterDatasource(piiData)
+  .then(() => {
+    return store.RegisterDatasource(driverSettings);
+  })
+  .catch((err) => {
+    console.log('Error registering data source:' + err);
+  });
+
+function getSettings() {
+  const datasourceid = 'redditSimulatorSettings';
+  return new Promise((resolve, reject) => {
+    store.KV.Read(datasourceid, 'settings')
+      .then((settings) => {
+        console.log('[getSettings] read response = ', settings);
+        if (Object.keys(settings).length === 0) {
+          //return defaults
+          const settings = RedditSimulatorDefaultSettings;
+          //console.log('[getSettings] using defaults Using ----> ', settings);
+          resolve(settings);
+          return;
+        }
+
+        //console.log('[getSettings]', settings);
+        resolve(settings);
+      })
+      .catch((err) => {
+        const settings = RedditSimulatorDefaultSettings;
+        console.log('Error getting settings', err);
+        console.log('[getSettings] using defaults Using ----> ', settings);
+        resolve(settings);
+      });
+  });
+}
+
+function setSettings(settings) {
+  const datasourceid = 'redditSimulatorSettings';
+  return new Promise((resolve, reject) => {
+    store.KV.Write(datasourceid, 'settings', settings)
+      .then(() => {
+        //console.log('[setSettings] settings saved', settings);
+        resolve(settings);
+      })
+      .catch((err) => {
+        console.log('Error setting settings', err);
+        reject(err);
+      });
+  });
+}
+
+async function save(datasourceid, data) {
+  console.log('Saving pii event::', data);
+  const json = { data };
+  store.TSBlob.Write(datasourceid, json)
+    .then((resp) => {
+      console.log('Save got response ', resp);
+    })
+    .catch((error) => {
+      console.log('Error writing to store:', error);
+    });
+}
 
 //when testing, we run as http, (to prevent the need for self-signed certs etc);
 if (DATABOX_TESTING) {
